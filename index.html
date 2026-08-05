@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cameron Chambers — Full-Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-deep:#0A1B30;
+    --ink:#0F2A4A;
+    --ink-raised:#132F53;
+    --line-strong:#3C6AA0;
+    --line-faint:rgba(158,190,224,0.14);
+    --line-faintest:rgba(158,190,224,0.07);
+    --chalk:#EAF0F6;
+    --muted:#93ACC9;
+    --muted-dim:#5D7597;
+    --brass:#E8B04B;
+    --brass-dim:#B98A38;
+    --cyan:#7FDBDA;
+    --font-display:'Space Grotesk',sans-serif;
+    --font-mono:'IBM Plex Mono',monospace;
+    --font-body:'Inter',sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  body{
+    background:var(--ink);
+    color:var(--chalk);
+    font-family:var(--font-body);
+    line-height:1.6;
+    position:relative;
+    background-image:
+      repeating-linear-gradient(0deg, var(--line-faintest) 0, var(--line-faintest) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--line-faintest) 0, var(--line-faintest) 1px, transparent 1px, transparent 32px);
+  }
+
+  a{color:inherit;}
+
+  .ruler-top, .ruler-left{position:fixed; z-index:5; pointer-events:none; color:var(--muted-dim); font-family:var(--font-mono); font-size:9px; letter-spacing:0.05em;}
+  .ruler-top{top:0; left:0; right:0; height:20px; display:flex; background:var(--ink-deep); border-bottom:1px solid var(--line-faint);}
+  .ruler-top span{flex:1; border-right:1px solid var(--line-faint); display:flex; align-items:center; justify-content:center; opacity:0.6;}
+  @media (max-width:800px){.ruler-top{display:none;}}
+
+  header{
+    position:sticky; top:0; z-index:10;
+    background:rgba(10,27,48,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line-faint);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 40px;
+  }
+  .brand{font-family:var(--font-mono); font-size:13px; letter-spacing:0.12em; color:var(--muted);}
+  .brand b{color:var(--chalk);}
+  nav{display:flex; gap:28px; font-family:var(--font-mono); font-size:12px; letter-spacing:0.08em;}
+  nav a{text-decoration:none; color:var(--muted); position:relative; padding-bottom:4px; transition:color 0.2s;}
+  nav a:hover, nav a:focus-visible{color:var(--cyan);}
+  nav a::after{content:""; position:absolute; left:0; bottom:0; width:0; height:1px; background:var(--brass); transition:width 0.25s;}
+  nav a:hover::after, nav a:focus-visible::after{width:100%;}
+  @media (max-width:700px){nav{display:none;}}
+
+  .wrap{max-width:1040px; margin:0 auto; padding:0 40px;}
+  @media (max-width:700px){.wrap{padding:0 20px;}}
+
+  /* HERO */
+  .hero{padding:100px 0 60px; position:relative;}
+  .eyebrow{font-family:var(--font-mono); font-size:12px; letter-spacing:0.18em; color:var(--brass); margin-bottom:18px; display:flex; align-items:center; gap:10px;}
+  .eyebrow::before{content:""; width:26px; height:1px; background:var(--brass);}
+  h1{
+    font-family:var(--font-display); font-weight:700;
+    font-size:clamp(2.6rem, 6vw, 4.6rem);
+    line-height:1.02; letter-spacing:-0.01em;
+    color:var(--chalk);
+  }
+  .role-line{
+    font-family:var(--font-mono); font-size:clamp(0.95rem,2vw,1.15rem);
+    color:var(--muted); margin-top:22px; max-width:640px;
+    border-left:2px solid var(--line-strong); padding-left:16px;
+  }
+  .role-line b{color:var(--cyan); font-weight:500;}
+
+  .titleblock{
+    margin-top:56px;
+    border:1px solid var(--line-strong);
+    background:var(--ink-raised);
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    max-width:720px;
+  }
+  .titleblock .cell{
+    padding:14px 18px;
+    border-right:1px solid var(--line-faint);
+    border-top:1px solid var(--line-faint);
+  }
+  .titleblock .cell:nth-child(3n){border-right:none;}
+  .titleblock .cell:nth-child(-n+3){border-top:none;}
+  .titleblock .label{font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.1em; color:var(--muted-dim); text-transform:uppercase; margin-bottom:6px;}
+  .titleblock .value{font-family:var(--font-mono); font-size:12.5px; color:var(--chalk); word-break:break-word;}
+  .titleblock .value a{text-decoration:none; border-bottom:1px dotted var(--muted-dim);}
+  .titleblock .value a:hover{color:var(--cyan); border-color:var(--cyan);}
+  @media (max-width:640px){.titleblock{grid-template-columns:repeat(2,1fr);} .titleblock .cell:nth-child(3n){border-right:1px solid var(--line-faint);} .titleblock .cell:nth-child(2n){border-right:none;} .titleblock .cell:nth-child(-n+3){border-top:1px solid var(--line-faint);} .titleblock .cell:nth-child(-n+2){border-top:none;}}
+
+  /* SECTION HEADERS */
+  section{padding:70px 0; border-top:1px solid var(--line-faint); position:relative;}
+  .sheet-label{
+    font-family:var(--font-mono); font-size:11px; color:var(--muted-dim); letter-spacing:0.12em;
+    position:absolute; top:70px; right:40px;
+  }
+  @media (max-width:700px){.sheet-label{display:none;}}
+
+  .section-head{display:flex; align-items:baseline; gap:16px; margin-bottom:44px;}
+  .section-num{font-family:var(--font-mono); font-size:13px; color:var(--brass);}
+  h2{font-family:var(--font-display); font-weight:600; font-size:clamp(1.6rem,3vw,2.1rem); letter-spacing:-0.01em;}
+
+  .reveal{opacity:0; transform:translateY(16px); transition:opacity 0.6s ease, transform 0.6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* EXPERIENCE */
+  .entry{
+    position:relative;
+    padding:28px 0 28px 28px;
+    border-left:1px solid var(--line-strong);
+    margin-bottom:8px;
+  }
+  .entry::before{
+    content:""; position:absolute; left:-5px; top:34px; width:9px; height:9px;
+    background:var(--ink); border:2px solid var(--brass); border-radius:50%;
+  }
+  .entry-head{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:4px;}
+  .entry-title{font-family:var(--font-display); font-weight:600; font-size:1.25rem; color:var(--chalk);}
+  .entry-org{font-family:var(--font-mono); font-size:13px; color:var(--cyan); margin-bottom:2px;}
+  .entry-meta{font-family:var(--font-mono); font-size:11.5px; color:var(--muted-dim); letter-spacing:0.04em;}
+  .tech-tags{display:flex; flex-wrap:wrap; gap:6px; margin:14px 0 16px;}
+  .tech-tag{font-family:var(--font-mono); font-size:10.5px; color:var(--muted); border:1px solid var(--line-faint); padding:3px 9px; border-radius:2px; letter-spacing:0.03em;}
+  .entry ul{list-style:none; display:flex; flex-direction:column; gap:9px;}
+  .entry li{position:relative; padding-left:18px; color:var(--muted); font-size:14.5px;}
+  .entry li::before{content:"›"; position:absolute; left:0; color:var(--brass-dim); font-family:var(--font-mono);}
+  .entry li b{color:var(--chalk); font-weight:600;}
+
+  /* PROJECTS */
+  .project-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:22px;}
+  @media (max-width:760px){.project-grid{grid-template-columns:1fr;}}
+  .card{
+    position:relative;
+    border:1px solid var(--line-faint);
+    background:var(--ink-raised);
+    padding:26px;
+    transition:border-color 0.25s, transform 0.25s;
+  }
+  .card:hover, .card:focus-within{border-color:var(--line-strong); transform:translateY(-3px);}
+  .card::before, .card::after{
+    content:""; position:absolute; width:14px; height:14px; border-color:var(--brass); border-style:solid; opacity:0; transition:opacity 0.25s;
+  }
+  .card::before{top:-1px; left:-1px; border-width:2px 0 0 2px;}
+  .card::after{bottom:-1px; right:-1px; border-width:0 2px 2px 0;}
+  .card:hover::before, .card:hover::after, .card:focus-within::before, .card:focus-within::after{opacity:1;}
+  .card-status{position:absolute; top:20px; right:22px; font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.08em; color:var(--brass); border:1px solid var(--brass-dim); padding:2px 8px; border-radius:2px;}
+  .card h3{font-family:var(--font-display); font-size:1.15rem; font-weight:600; margin-bottom:10px; padding-right:70px;}
+  .card .tech-tags{margin:12px 0 14px;}
+  .card ul{list-style:none; display:flex; flex-direction:column; gap:8px;}
+  .card li{position:relative; padding-left:16px; color:var(--muted); font-size:13.8px;}
+  .card li::before{content:"–"; position:absolute; left:0; color:var(--muted-dim);}
+
+  /* SKILLS */
+  .skills-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:28px 40px;}
+  @media (max-width:640px){.skills-grid{grid-template-columns:1fr;}}
+  .skill-cat-label{font-family:var(--font-mono); font-size:11px; letter-spacing:0.1em; color:var(--brass); text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:8px;}
+  .skill-cat-label::after{content:""; flex:1; height:1px; background:var(--line-faint);}
+  .chip-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{font-family:var(--font-mono); font-size:12.5px; color:var(--chalk); background:var(--ink-raised); border:1px solid var(--line-faint); padding:6px 12px; border-radius:2px;}
+
+  /* EDUCATION */
+  .edu-box{border:1px solid var(--line-faint); background:var(--ink-raised); padding:30px;}
+  .edu-head{display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; margin-bottom:6px;}
+  .edu-school{font-family:var(--font-display); font-size:1.2rem; font-weight:600;}
+  .edu-loc{font-family:var(--font-mono); font-size:12px; color:var(--muted-dim);}
+  .edu-degrees{color:var(--cyan); font-size:14.5px; margin:6px 0 14px; font-family:var(--font-mono);}
+  .edu-detail{color:var(--muted); font-size:14px; margin-bottom:6px;}
+  .edu-detail b{color:var(--chalk);}
+
+  /* FOOTER / TITLE BLOCK */
+  footer{border-top:1px solid var(--line-faint); padding:70px 0 50px;}
+  .footer-head{margin-bottom:34px;}
+  .footer-head h2{margin-bottom:10px;}
+  .footer-head p{color:var(--muted); max-width:480px; font-size:14.5px;}
+  .footer-links{display:flex; gap:14px; margin-top:22px; flex-wrap:wrap;}
+  .footer-links a{
+    font-family:var(--font-mono); font-size:12.5px; text-decoration:none;
+    border:1px solid var(--line-strong); padding:10px 18px; color:var(--chalk);
+    transition:background 0.2s, color 0.2s;
+  }
+  .footer-links a:hover, .footer-links a:focus-visible{background:var(--brass); color:var(--ink-deep); border-color:var(--brass);}
+  .stamp{
+    margin-top:50px; border-top:1px solid var(--line-faint); padding-top:20px;
+    display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px;
+    font-family:var(--font-mono); font-size:10.5px; color:var(--muted-dim); letter-spacing:0.04em;
+  }
+</style>
+</head>
+<body>
+
+  <div class="ruler-top" aria-hidden="true">
+    <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span>
+  </div>
+
+  <header>
+    <div class="brand"><b>CAMERON CHAMBERS</b> · SHEET INDEX</div>
+    <nav>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+
+    <section class="hero" style="border-top:none;">
+      <div class="eyebrow">PORTFOLIO — DRAWN TO SCALE</div>
+      <h1>Cameron<br>Chambers.</h1>
+      <p class="role-line">Full-stack developer building on a foundation of <b>applied mathematics</b> and <b>data science</b> — currently shipping gameplay systems for 8,000+ users at Roulo, and building a tile-based 2D world in Godot on the side.</p>
+
+      <div class="titleblock">
+        <div class="cell"><div class="label">Role</div><div class="value">Full-Stack Developer</div></div>
+        <div class="cell"><div class="label">Location</div><div class="value">Clarksville, TN</div></div>
+        <div class="cell"><div class="label">Contact</div><div class="value"><a href="mailto:cameronchambers1215@gmail.com">Email</a></div></div>
+        <div class="cell"><div class="label">Code</div><div class="value"><a href="https://github.com/cham24" target="_blank" rel="noopener">github.com/cham24</a></div></div>
+        <div class="cell"><div class="label">LinkedIn</div><div class="value"><a href="https://www.linkedin.com/in/cam-chambers-174b051a6/" target="_blank" rel="noopener">Profile ↗</a></div></div>
+        <div class="cell"><div class="label">Sheet</div><div class="value">01 / 01</div></div>
+        <div class="cell"><div class="label">Scale</div><div class="value">1 : 1</div></div>
+        <div class="cell"><div class="label">Status</div><div class="value">Open to work</div></div>
+        <div class="cell"><div class="label">Rev</div><div class="value">2026.08</div></div>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="sheet-label">SHEET 02 — EXPERIENCE</div>
+      <div class="section-head reveal"><span class="section-num">01</span><h2>Experience</h2></div>
+
+      <div class="entry reveal">
+        <div class="entry-head">
+          <div>
+            <div class="entry-title">Full-Stack Software Developer</div>
+            <div class="entry-org">Roulo — Remote · <a href="https://roulobets.com" target="_blank" rel="noopener" style="color:var(--cyan); border-bottom:1px dotted var(--cyan); text-decoration:none;">roulobets.com ↗</a></div>
+          </div>
+          <div class="entry-meta">JUL 2024 — PRESENT</div>
+        </div>
+        <div class="tech-tags">
+          <span class="tech-tag">React.js</span><span class="tech-tag">Node.js</span><span class="tech-tag">REST APIs</span><span class="tech-tag">MongoDB</span><span class="tech-tag">JavaScript</span><span class="tech-tag">Data Analysis</span>
+        </div>
+        <ul>
+          <li>Supported full-stack development for an online gaming platform serving <b>8,000+ active users</b> across front-end design, backend functionality, database management, and data analysis</li>
+          <li>Developed <b>100+ interactive React.js components</b> for game pages, navigation, cards, controls, and results displays</li>
+          <li>Built and improved <b>6 casino-style games</b>, including Mines and Plinko, improving load times and reducing bug reports by <b>50%+</b></li>
+          <li>Contributed to backend game logic supporting <b>10,000+ recorded games</b>, implementing atomic transaction flows to improve security and concurrent speeds</li>
+          <li>Reduced bug count by <b>40%</b> through systematic testing and debugging of front-end and backend features</li>
+        </ul>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-head">
+          <div>
+            <div class="entry-title">IT Support</div>
+            <div class="entry-org">Leavitt Group — Insurance Agency, Cedar City, UT</div>
+          </div>
+          <div class="entry-meta">MAY 2024 — OCT 2024</div>
+        </div>
+        <ul>
+          <li>Provided IT support and system maintenance for <b>500+ employees</b>, keeping workstations updated, secure, and operational</li>
+          <li>Upgraded operating systems, firmware, and BIOS settings across <b>800+ devices</b>, reducing system issues by <b>30%</b></li>
+          <li>Diagnosed and resolved <b>50+ tickets per month</b> involving system errors, update failures, and performance problems</li>
+          <li>Documented <b>20 technical guides</b> and procedures for upgrades, troubleshooting, and internal reference</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="sheet-label">SHEET 03 — PROJECTS</div>
+      <div class="section-head reveal"><span class="section-num">02</span><h2>Projects</h2></div>
+
+      <div class="project-grid">
+        <div class="card reveal">
+          <div class="card-status" style="border-color:var(--cyan); color:var(--cyan);">LIVE</div>
+          <h3>Mack's Tattoos — Studio Site</h3>
+          <div class="tech-tags">
+            <span class="tech-tag">React</span><span class="tech-tag">Freelance</span><span class="tech-tag">Responsive Design</span>
+          </div>
+          <ul>
+            <li>Designed and built a marketing website for a tattoo studio as a freelance client project</li>
+            <li>Built with React, focused on a clean, mobile-friendly presentation of the studio's work and booking info</li>
+          </ul>
+          <div style="margin-top:16px;">
+            <a href="https://mackstattoos.com" target="_blank" rel="noopener" style="font-family:var(--font-mono); font-size:12px; color:var(--cyan); text-decoration:none; border-bottom:1px dotted var(--cyan);">Visit site ↗</a>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="card-status" style="border-color:var(--cyan); color:var(--cyan);">LIVE</div>
+          <h3>Roulo — Online Casino Platform</h3>
+          <div class="tech-tags">
+            <span class="tech-tag">React.js</span><span class="tech-tag">Node.js</span><span class="tech-tag">MongoDB</span>
+          </div>
+          <ul>
+            <li>Production platform serving 8,000+ active users — see Experience for full scope of work</li>
+            <li>Contributed front-end components, backend game logic, and data analysis across the platform</li>
+          </ul>
+          <div style="margin-top:16px;">
+            <a href="https://roulobets.com" target="_blank" rel="noopener" style="font-family:var(--font-mono); font-size:12px; color:var(--cyan); text-decoration:none; border-bottom:1px dotted var(--cyan);">Visit site ↗</a>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="card-status">ONGOING</div>
+          <h3>Terraria-Style 2D Sandbox Game</h3>
+          <div class="tech-tags">
+            <span class="tech-tag">Godot 4.3</span><span class="tech-tag">C#</span><span class="tech-tag">TileMap</span><span class="tech-tag">2D Physics</span>
+          </div>
+          <ul>
+            <li>Building a 2D sandbox/survival game inspired by Terraria, focused on tile-based world building and movement mechanics</li>
+            <li>Implemented a tile-based map system using Godot's TileMap/TileSet tools for a modular, expandable world</li>
+            <li>Built a custom player controller handling movement, collision, and environment interaction</li>
+            <li>Structuring the codebase with modular C# components to support planned mining, inventory, and crafting systems</li>
+          </ul>
+        </div>
+
+        <div class="card reveal">
+          <h3>Database Management System</h3>
+          <div class="tech-tags">
+            <span class="tech-tag">MongoDB</span><span class="tech-tag">MySQL</span><span class="tech-tag">PHP</span><span class="tech-tag">REST APIs</span>
+          </div>
+          <ul>
+            <li>Designed and implemented a database-backed application to manage inventory, contacts, and related records with search and filtering capabilities</li>
+            <li>Built role-based access control, distinguishing admin and standard user permissions for secure data management</li>
+            <li>Developed backend functionality for data entry, updates, authentication, and secure information handling</li>
+            <li>Tested database queries and application features for accurate retrieval and reliable performance</li>
+          </ul>
+        </div>
+
+        <div class="card reveal">
+          <div class="card-status">ONGOING</div>
+          <h3>Point-and-Click Adventure Game</h3>
+          <div class="tech-tags">
+            <span class="tech-tag">Unity</span><span class="tech-tag">C#</span><span class="tech-tag">2D Tools</span>
+          </div>
+          <ul>
+            <li>Developing a narrative-driven 2D point-and-click adventure game using Unity's built-in 2D toolset and C#</li>
+            <li>Implemented core scene navigation and click-based interaction systems as the foundation for upcoming puzzle and dialogue mechanics</li>
+          </ul>
+        </div>
+
+        <div class="card reveal">
+          <h3>Data Analysis &amp; Visualization Tool</h3>
+          <div class="tech-tags">
+            <span class="tech-tag">Python</span><span class="tech-tag">CSV</span><span class="tech-tag">Data Viz</span>
+          </div>
+          <ul>
+            <li>Built a Python-based analysis tool allowing users to upload CSV files and generate visual reports</li>
+            <li>Implemented statistical summary functions (mean, median, correlation) alongside trend and regression analysis to surface deeper patterns</li>
+            <li>Processed and organized structured data to identify trends and display patterns through graphing</li>
+            <li>Tested against multiple datasets to improve accuracy, usability, and reliability</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="sheet-label">SHEET 04 — SPECIFICATIONS</div>
+      <div class="section-head reveal"><span class="section-num">03</span><h2>Skills</h2></div>
+
+      <div class="skills-grid reveal">
+        <div>
+          <div class="skill-cat-label">Languages</div>
+          <div class="chip-row">
+            <span class="chip">JavaScript</span><span class="chip">Python</span><span class="chip">Java</span><span class="chip">C/C++</span><span class="chip">C#</span><span class="chip">SQL</span><span class="chip">PHP</span><span class="chip">R</span><span class="chip">Haskell</span><span class="chip">Bash</span><span class="chip">MATLAB</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-cat-label">Full-Stack</div>
+          <div class="chip-row">
+            <span class="chip">React.js</span><span class="chip">Node.js</span><span class="chip">REST APIs</span><span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">Responsive Design</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-cat-label">Databases &amp; Data</div>
+          <div class="chip-row">
+            <span class="chip">MongoDB</span><span class="chip">MySQL</span><span class="chip">Database Mgmt</span><span class="chip">Data Analysis</span><span class="chip">Data Viz</span><span class="chip">CSV Processing</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-cat-label">Tools &amp; Platforms</div>
+          <div class="chip-row">
+            <span class="chip">Git</span><span class="chip">GitHub</span><span class="chip">Firebase</span><span class="chip">Docker</span><span class="chip">Unity</span><span class="chip">Godot</span><span class="chip">Google Cloud</span><span class="chip">Google Colab</span><span class="chip">RStudio</span><span class="chip">Eclipse</span><span class="chip">VS Code</span><span class="chip">Xcode</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="education">
+      <div class="sheet-label">SHEET 05 — EDUCATION</div>
+      <div class="section-head reveal"><span class="section-num">04</span><h2>Education</h2></div>
+
+      <div class="edu-box reveal">
+        <div class="edu-head">
+          <div class="edu-school">Southern Utah University</div>
+          <div class="edu-loc">Cedar City, UT · AUG 2019 – APR 2024</div>
+        </div>
+        <div class="edu-degrees">B.S. Computer Science &amp; Engineering · B.S. Mathematics — Applied Mathematics</div>
+        <div class="edu-detail"><b>Certificate of Proficiency in Data Science</b> · GPA 3.5</div>
+        <div class="edu-detail">Dean's List: Spring 2020, Fall 2022, Fall 2023</div>
+        <div class="edu-detail" style="margin-top:12px; color:var(--muted);">Completed dual bachelor's degrees with a data science certification, combining software engineering, applied mathematics, and analytical problem-solving.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="contact">
+    <div class="wrap">
+      <div class="footer-head reveal">
+        <span class="section-num">05</span>
+        <h2>Let's build something.</h2>
+        <p>Open to full-stack, data-adjacent, and game-dev roles. Reach out directly or check the code.</p>
+        <div class="footer-links">
+          <a href="mailto:cameronchambers1215@gmail.com">Email me</a>
+          <a href="https://github.com/cham24" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="https://www.linkedin.com/in/cam-chambers-174b051a6/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </div>
+      <div class="stamp">
+        <div>CAMERON CHAMBERS — PORTFOLIO SHEET</div>
+        <div>CLARKSVILLE, TN</div>
+        <div>REV 2026.08</div>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:0.15});
+  reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
